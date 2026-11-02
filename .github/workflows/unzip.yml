@@ -1,0 +1,22 @@
+name: Unzip project
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract zip to repo root
+        run: |
+          unzip -q quba-growth-lab.zip -d _tmp
+          cp -a _tmp/quba-growth-lab/. .
+          rm -rf _tmp quba-growth-lab.zip
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.githubusercontent.com"
+          git add -A
+          git commit -m "Extract project files"
+          git push
